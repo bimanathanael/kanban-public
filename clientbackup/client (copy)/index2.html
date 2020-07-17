@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Kanban, by bimanathan</title>
+        <link rel="stylesheet" href="assets/css/style.css"> 
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Galada&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body>
+        <div id="app">
+            <header class="m-4 d-flex align-items-center flex-column">
+                <h1 id="header">
+                    Welcome to Kanban Board Apps
+                </h1>
+                <button v-if="isLogin" type="button" class="btn btn-brown" v-on:click="processLogout"> Logout</button>
+
+            </header>
+            <hr class="separator">
+            <div>
+                <div v-if="isLogin==false">
+                    <div class="d-flex justify-content-center">
+                        <div v-if="loginPage && !registerPage" class="containerIndex">
+                            <div class="d-flex justify-content-center">
+                                <div class="d-flex align-items-center flex-column">
+                                    <h1 class="titleIndex">
+                                        Login
+                                    </h1>
+                                    <form v-on:submit.prevent="processLogin">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" >Email</span>
+                                            </div>
+                                            <input id="loginEmail" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="type Email here...">
+                                        </div>
+                                        <div class="input-group mb-4 mt-">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" >Password</span>
+                                            </div>
+                                            <input id="loginPassword" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="type Password here...">
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn btn-light" style="margin-left:20%">Login</button>
+                                            <button type="button" class="btn btn-brown ml-2" v-on:click="toRegister"> to Register >></button>
+                                        </div>
+                                    </form>
+                                </div> 
+                            </div>
+                        </div>
+                        <div v-if="!loginPage && registerPage" class="containerIndex">
+                            <div class="d-flex justify-content-center">
+                                <div class="d-flex align-items-center flex-column">
+                                    <h1 class="titleIndex">
+                                        Register
+                                    </h1>
+                                    <form v-on:submit.prevent="processRegister">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" >Email</span>
+                                            </div>
+                                            <input id="registerEmail" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="type Email here...">
+                                        </div>
+                                        <div class="input-group mb-4 mt-">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" >Password</span>
+                                            </div>
+                                            <input id="registerPassword" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="type Password here...">
+                                        </div>
+                                        <div class="input-group mb-4 mt-">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" >Password Confirmation</span>
+                                            </div>
+                                            <input id="registerPasswordConfirmation" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="type again Password here...">
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn btn-light" style="margin-left:20%">Register</button>
+                                            <button type="button" class="btn btn-brown ml-2"  v-on:click="toLogin"> to Login >></button>
+                                        </div>
+                                    </form>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- afterLogin kanbans board below  -->
+                <div v-if="isLogin == true">
+                    <div class="containerHome">
+                        <div class="section sectionBacklog">
+                            <div class="title">
+                                <p class="subTitle"> Backlog</p>
+                            </div>
+                            <hr  class="separator">
+                            
+                            <div class="card mine" style="width: 100%;" v-for="data in dataTask"  v-if="data.category=='Backlog'">
+                                <div class="row">
+                                    <div class="col-2 perCard">
+                                        +
+                                    </div>
+                                    <div class="col-10 card-body">
+                                        <h6 class="card-title" >{{ data.title }}</h6>
+                                        <div class="btn-group" v-if="data.UserId==UserId">
+                                            <button type="button" class="btn btn-action">Action</button>
+                                            <button type="button" class="btn btn-action dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <button class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Backlog')">to Backlog</button>
+                                                <button class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Product')">to Product</button>
+                                                <button class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Development')">to Development</button>
+                                                <button class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Done')">to Done</button>
+                                                <div class="dropdown-divider"></div>
+                                                <button class="dropdown-item bg-danger" href="#" v-on:click.prevent="processDelete(data.id)">Delete this</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <hr  class="separator">
+
+                            <form v-on:submit.prevent="processAddTaskBacklog" class="input-group mb-3">
+                                <input id="titleAddTaskBacklog" type="text" class="form-control" placeholder="add task.." aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <input id="categoryAddTaskBacklog" value="Backlog" type="hidden" class="form-control" placeholder="add task.." aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <div class="input-group-append">
+
+                                <button type="submit" class="btn btn-warning" type="button" id="button-addon2">+ add task</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="section sectionProduct">
+                            <div class="title">
+                                <p class="subTitle"> Product </p>
+                            </div>
+                            <hr  class="separator">
+                            
+                            <div class="card mine" style="width: 100%;" v-for="data in dataTask"  v-if="data.category=='Product'">
+                                <div class="row">
+                                    <div class="col-2 perCard">
+                                        +
+                                    </div>
+                                    <div class="col-10 card-body">
+                                        <h6 class="card-title" >{{ data.title }}</h6>
+                                        <div class="btn-group" v-if="data.UserId==UserId">
+                                            <button type="button" class="btn btn-action">Action</button>
+                                            <button type="button" class="btn btn-action dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Backlog')">to Backlog</a>
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Product')">to Product</a>
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Development')">to Development</a>
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Done')" >to Done</a>
+                                                <div class="dropdown-divider"></div>
+                                                <button class="dropdown-item bg-danger" href="#" v-on:click.prevent="processDelete(data.id)">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr  class="separator">
+                            <form v-on:submit.prevent="processAddTaskProduct" class="input-group mb-3">
+                                <input id="titleAddTaskProduct" type="text" class="form-control" placeholder="add task.." aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <input id="categoryAddTaskProduct" value="Product" type="hidden" class="form-control" placeholder="add task.." aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <div class="input-group-append">
+
+                                <button type="submit" class="btn btn-warning" type="button" id="button-addon2">+ add task</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="section sectionDevelop">
+                            <div class="title">
+                                <p class="subTitle"> Development</p>
+                            </div>
+                            <hr  class="separator">
+                            
+                            <div class="card mine" style="width: 100%;" v-for="data in dataTask"  v-if="data.category=='Development'">
+                                <div class="row">
+                                    <div class="col-2 perCard">
+                                        +
+                                    </div>
+                                    <div class="col-10 card-body">
+                                        <h6 class="card-title" >{{ data.title }}</h6>
+                                        <div class="btn-group" v-if="data.UserId==UserId">
+                                            <button type="button" class="btn btn-action">Action</button>
+                                            <button type="button" class="btn btn-action dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Backlog')">to Backlog</a>
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Product')">to Product</a>
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Development')">to Development</a>
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Done')" >to Done</a>
+                                                <div class="dropdown-divider"></div>
+                                                <button class="dropdown-item bg-danger" href="#" v-on:click.prevent="processDelete(data.id)">Delete this</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr  class="separator">
+                            <form v-on:submit.prevent="processAddTaskDev" class="input-group mb-3">
+                                <input id="titleAddTaskDev" type="text" class="form-control" placeholder="add task.." aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <input id="categoryAddTaskDev" value="Development" type="hidden" class="form-control" placeholder="add task.." aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <div class="input-group-append">
+
+                                <button type="submit" class="btn btn-warning" type="button" id="button-addon2">+ add task</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="section sectionDone">
+                            <div class="title">
+                                <p class="subTitle"> Done</p>
+                            </div>
+                            <hr  class="separator">
+                            
+                            <div class="card mine" style="width: 100%;" v-for="data in dataTask"  v-if="data.category=='Done'">
+                                <div class="row">
+                                    <div class="col-2 perCard">
+                                        +
+                                    </div>
+                                    <div class="col-10 card-body">
+                                        <h6 class="card-title" >{{ data.title }}</h6>
+                                        <div class="btn-group" v-if="data.UserId==UserId">
+                                            <button type="button" class="btn btn-action">Action</button>
+                                            <button type="button" class="btn btn-action dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Backlog')">to Backlog</a>
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Product')">to Product</a>
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Development')">to Development</a>
+                                                <a class="dropdown-item" href="#" v-on:click.prevent="moveTo(data.id,data.title,'Done')" >to Done</a>
+                                                <div class="dropdown-divider"></div>
+                                                <button class="dropdown-item bg-danger" href="#" v-on:click.prevent="processDelete(data.id)">Delete this</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr  class="separator">
+                            <form v-on:submit.prevent="processAddTaskDone" class="input-group mb-3">
+                                <input id="titleAddTaskDone" type="text" class="form-control" placeholder="add task.." aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <input id="categoryAddTaskDone" value="Done" type="hidden" class="form-control" placeholder="add task.." aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <div class="input-group-append">
+
+                                <button type="submit" class="btn btn-warning" type="button" id="button-addon2">+ add task</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        
+
+        <script src="assets/js/main.js"></script>
+    </body>
+</html>

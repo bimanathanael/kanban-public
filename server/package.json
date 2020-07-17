@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,7 +15,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "google-auth-library": "^6.0.5",
     "jsonwebtoken": "^8.5.1",
+    "mailgun-js": "^0.22.0",
     "pg": "^8.3.0",
     "sequelize": "^6.3.3"
   }

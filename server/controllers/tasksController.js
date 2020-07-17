@@ -1,13 +1,20 @@
 const { Task, User } = require('../models')
+const doMail = require('../helpers/mail')
+
 
 class TasksController{
     static view ( req, res, next) {
-        Task.findAll()
+        Task.findAll( {include: [User]})
         .then ( data => {
             res.status(200).json(data)
         })
         .catch( err =>{
-            res.status(500).json(err)
+            const errMsg = {
+                name: "customValidation",
+                message: "Server Internal Error",
+                status : 500,
+            }
+            next(errMsg)
         })
     }
 
@@ -15,10 +22,16 @@ class TasksController{
         const selectedId = req.params.id
         Task.findByPk(selectedId)
         .then ( data => {
-            res.status(200).json(data)
+            if(data == null){
+                return res.status(404).json({ 
+                    message: "data not found"
+                })
+            } else {
+                res.status(200).json(data)
+            }
         })
         .catch( err =>{
-            res.status(500).json(err)
+            next(err)
         })
     }
 
@@ -28,13 +41,20 @@ class TasksController{
             category : req.body.category,
             UserId : req.userData.id,
         }
-        console.log(newData, "newDatanewData")
+        if(newData.title == "" || newData.category == "" || !newData.title || !newData.category ){
+            throw {
+                name: "customErr",
+                message: "Please Fill All Fields",
+                status : 404,
+            }
+        }
         Task.create(newData)
         .then ( data => {
+            doMail(data)
             res.status(201).json(data)
         })
         .catch( err =>{
-            res.status(500).json(err)
+            next(err)
         })
     }
 
@@ -45,18 +65,33 @@ class TasksController{
             category : req.body.category,
             UserId : req.userData.id,
         }
+        if(newData.title == "" || newData.category == ""  || !newData.category || !newData.category){
+            throw {
+                name: "customErr",
+                message: "Please Fill All Fields",
+                status : 404,
+            }
+        }
         Task.findByPk(selectedId)
         .then ( data => {
-            data.update(newData)
-            .then ( updatedRow => {
-                res.status(201).json(data)
-            })
-            .catch( err =>{
-                res.status(500).json(err)
-            })
+            if(data == null){
+                throw {
+                    name: "customErr",
+                    message: "data not found",
+                    status : 404
+                }
+            } else {
+                data.update(newData)
+                .then ( updatedRow => {
+                    res.status(201).json(data)
+                })
+                .catch( err =>{
+                    next(err)
+                })
+            }
         })
         .catch( err =>{
-            res.status(500).json(err)
+            next(err)
         })
     }
 
@@ -66,14 +101,28 @@ class TasksController{
         .then ( data => {
             data.destroy()
             .then ( deletedRow => {
-                res.status(201).json(data)
+                if(!data){
+                    throw {
+                        name: "customErr",
+                        message: "data not found",
+                        status : 404
+                    }
+                } else {
+                    return res.status(200).json(data)
+                }
             })
             .catch( err =>{
                 res.status(500).json(err)
             })
         })
         .catch( err =>{
-            res.status(404).json({error: "data not found"})
+            const errMsg = {
+                name: "customErr",
+                message: "data not found",
+                status : 404
+            }
+
+            next(errMsg)
         })
         
     }

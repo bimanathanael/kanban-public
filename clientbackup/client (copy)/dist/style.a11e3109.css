@@ -2,17 +2,14 @@ body {
     padding-bottom :2%
 }
 
-.error{
-    font-size: 100% !important;
-}
-
 .scroll {
-    max-height: 600px;
+    max-height: 400px;
     max-width: auto;
     overflow-y: auto;
 }
 
 .containerHome {
+    display: flex;
     justify-content: center;
     align-items: flex-start;
     background-color: #3f4441;
@@ -47,7 +44,6 @@ body {
 }
 .sectionBacklog .card{
     border: 1px solid #f4ebc1;
-
 }
 
 .sectionProduct .perCard{
@@ -59,11 +55,11 @@ body {
 }
 
 
-.sectionDev .perCard{
+.sectionDevelop .perCard{
     background-color: #709fb0;
     border: 2px solid #709fb0;
 }
-.sectionDev .card{
+.sectionDevelop .card{
     border: 1px solid #709fb0;
 }
 
@@ -156,3 +152,6 @@ body {
 .btn-warning{
     border-left: 5px solid #ab8119 !important;
 }
+
+
+/*# sourceMappingURL=/style.a11e3109.css.map */
