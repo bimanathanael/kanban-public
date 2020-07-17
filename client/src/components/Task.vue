@@ -107,7 +107,7 @@ export default {
         moveTo(id,title,target,event) {
             axios({
                 method : "put",
-                url: `http://localhost:3333/tasks/${id}`,
+                url: `https://pure-shelf-85168.herokuapp.com/tasks/${id}`,
                 headers:{
                     access_token : localStorage.access_token
                 },
@@ -129,7 +129,7 @@ export default {
             console.log("this.deletedId",this.deletedId)
             axios({
                 method: "delete",
-                url: `http://localhost:3333/tasks/${this.deletedId}`,
+                url: `https://pure-shelf-85168.herokuapp.com/tasks/${this.deletedId}`,
                 headers: {
                     access_token : localStorage.access_token
                 }
@@ -163,7 +163,7 @@ export default {
                     if (willDelete) {
                         return axios({
                             method: "delete",
-                            url: `http://localhost:3333/tasks/${this.deletedId}`,
+                            url: `https://pure-shelf-85168.herokuapp.com/tasks/${this.deletedId}`,
                             headers: {
                                 access_token : localStorage.access_token
                             }
@@ -188,7 +188,7 @@ export default {
             this.showSucc = false
             axios({
                 method : "get",
-                url: `http://localhost:3333/tasks/${id}`,
+                url: `https://pure-shelf-85168.herokuapp.com/tasks/${id}`,
                 headers:{
                     access_token : localStorage.access_token
                 }
@@ -218,7 +218,7 @@ export default {
             const id = $('#taskId').val()
             axios({
                 method : "put",
-                url: `http://localhost:3333/tasks/${this.taskId}`,
+                url: `https://pure-shelf-85168.herokuapp.com/tasks/${this.taskId}`,
                 headers:{
                     access_token : localStorage.access_token
                 },

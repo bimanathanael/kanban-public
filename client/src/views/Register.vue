@@ -18,13 +18,13 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" >Password</span>
                         </div>
-                        <input v-model="registerPassword" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="type Password here...">
+                        <input v-model="registerPassword" type="password" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="type Password here...">
                     </div>
                     <div class="input-group mb-4 mt-">
                         <div class="input-group-prepend">
                             <span class="input-group-text" >Password Confirmation</span>
                         </div>
-                        <input v-model="confirmPass" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="type again Password here...">
+                        <input v-model="confirmPass" type="password" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="type again Password here...">
                     </div>
                     <div>
                         <button type="submit" class="btn btn-light" style="margin-left:20%">Register</button>
@@ -65,7 +65,7 @@ export default {
             }
             axios({
                 method: "post",
-                url: 'http://localhost:3333/register',
+                url: 'https://pure-shelf-85168.herokuapp.com/register',
                 data: {
                     email :  this.registerEmail,
                     password: this.registerPassword,

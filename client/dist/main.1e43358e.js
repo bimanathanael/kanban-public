@@ -10730,7 +10730,7 @@ var _default = {
       console.log("masuk");
       (0, _axios.default)({
         method: "post",
-        url: "http://localhost:3333/login",
+        url: "https://pure-shelf-85168.herokuapp.com/login",
         data: {
           email: this.loginEmail,
           password: this.loginPassword
@@ -10758,7 +10758,7 @@ var _default = {
         console.log(result, "datadatadatadata");
         (0, _axios.default)({
           method: "post",
-          url: "http://localhost:3333/googleSignin",
+          url: "https://pure-shelf-85168.herokuapp.com/googleSignin",
           data: {
             id_token: result.getAuthResponse().id_token
           }
@@ -10864,7 +10864,7 @@ exports.default = _default;
                 ],
                 staticClass: "form-control",
                 attrs: {
-                  type: "text",
+                  type: "password",
                   "aria-label": "Default",
                   "aria-describedby": "inputGroup-sizing-default",
                   placeholder: "type Password here..."
@@ -10886,7 +10886,7 @@ exports.default = _default;
                 "button",
                 {
                   staticClass: "btn btn-light",
-                  staticStyle: { "margin-left": "20%" },
+                  staticStyle: { "margin-left": "5%" },
                   attrs: { type: "submit" }
                 },
                 [_vm._v("Login")]
@@ -10895,7 +10895,7 @@ exports.default = _default;
               _c(
                 "button",
                 {
-                  staticClass: "g-signin2 ml-2",
+                  staticClass: "btn btn-primary g-signin2 ml-2",
                   on: {
                     click: function($event) {
                       $event.preventDefault()
@@ -11050,7 +11050,7 @@ var _default = {
 
       (0, _axios.default)({
         method: "post",
-        url: 'http://localhost:3333/register',
+        url: 'https://pure-shelf-85168.herokuapp.com/register',
         data: {
           email: this.registerEmail,
           password: this.registerPassword
@@ -11171,7 +11171,7 @@ exports.default = _default;
                 ],
                 staticClass: "form-control",
                 attrs: {
-                  type: "text",
+                  type: "password",
                   "aria-label": "Default",
                   "aria-describedby": "inputGroup-sizing-default",
                   placeholder: "type Password here..."
@@ -11202,7 +11202,7 @@ exports.default = _default;
                 ],
                 staticClass: "form-control",
                 attrs: {
-                  type: "text",
+                  type: "password",
                   "aria-label": "Default",
                   "aria-describedby": "inputGroup-sizing-default",
                   placeholder: "type again Password here..."
@@ -11424,7 +11424,7 @@ var _default = {
 
       (0, _axios.default)({
         method: "put",
-        url: "http://localhost:3333/tasks/".concat(id),
+        url: "https://pure-shelf-85168.herokuapp.com/tasks/".concat(id),
         headers: {
           access_token: localStorage.access_token
         },
@@ -11447,7 +11447,7 @@ var _default = {
       console.log("this.deletedId", this.deletedId);
       (0, _axios.default)({
         method: "delete",
-        url: "http://localhost:3333/tasks/".concat(this.deletedId),
+        url: "https://pure-shelf-85168.herokuapp.com/tasks/".concat(this.deletedId),
         headers: {
           access_token: localStorage.access_token
         }
@@ -11479,7 +11479,7 @@ var _default = {
         if (willDelete) {
           return (0, _axios.default)({
             method: "delete",
-            url: "http://localhost:3333/tasks/".concat(_this3.deletedId),
+            url: "https://pure-shelf-85168.herokuapp.com/tasks/".concat(_this3.deletedId),
             headers: {
               access_token: localStorage.access_token
             }
@@ -11504,7 +11504,7 @@ var _default = {
       this.showSucc = false;
       (0, _axios.default)({
         method: "get",
-        url: "http://localhost:3333/tasks/".concat(id),
+        url: "https://pure-shelf-85168.herokuapp.com/tasks/".concat(id),
         headers: {
           access_token: localStorage.access_token
         }
@@ -11532,7 +11532,7 @@ var _default = {
       var id = $('#taskId').val();
       (0, _axios.default)({
         method: "put",
-        url: "http://localhost:3333/tasks/".concat(this.taskId),
+        url: "https://pure-shelf-85168.herokuapp.com/tasks/".concat(this.taskId),
         headers: {
           access_token: localStorage.access_token
         },
@@ -12011,7 +12011,7 @@ var _default = {
     // fetchTask(){
     //     axios({
     //         method: "get",
-    //         url: 'http://localhost:3333/tasks',
+    //         url: 'https://pure-shelf-85168.herokuapp.com/tasks',
     //         headers: {
     //              access_token : localStorage.access_token
     //         }
@@ -12028,7 +12028,7 @@ var _default = {
 
       (0, _axios.default)({
         method: "post",
-        url: "http://localhost:3333/tasks",
+        url: "https://pure-shelf-85168.herokuapp.com/tasks",
         headers: {
           access_token: localStorage.access_token
         },
@@ -12327,7 +12327,7 @@ var _default = {
 
       (0, _axios.default)({
         method: "get",
-        url: 'http://localhost:3333/tasks',
+        url: 'https://pure-shelf-85168.herokuapp.com/tasks',
         headers: {
           access_token: localStorage.access_token
         }
@@ -12845,7 +12845,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34585" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34555" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

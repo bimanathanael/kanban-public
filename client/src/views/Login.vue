@@ -24,7 +24,7 @@
             </div>
             <input
               v-model="loginPassword"
-              type="text"
+              type="password"
               class="form-control"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
@@ -32,8 +32,8 @@
             />
           </div>
           <div>
-            <button type="submit" class="btn btn-light" style="margin-left:20%">Login</button>
-            <button class="g-signin2 ml-2" v-on:click.prevent="onSignIn"> Google </button>
+            <button type="submit" class="btn btn-light" style="margin-left:5%">Login</button>
+            <button class="btn btn-primary g-signin2 ml-2" v-on:click.prevent="onSignIn"> Google </button>
             <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
             <button type="button" class="btn btn-brown ml-2" @click="toRegister">to Register >></button>
           </div>
@@ -70,7 +70,7 @@ export default {
       console.log("masuk");
       axios({
         method: "post",
-        url: "http://localhost:3333/login",
+        url: "https://pure-shelf-85168.herokuapp.com/login",
         data: {
           email: this.loginEmail,
           password: this.loginPassword
@@ -102,7 +102,7 @@ export default {
         console.log(result,"datadatadatadata")
          axios({
             method: "post",
-            url: "http://localhost:3333/googleSignin",
+            url: "https://pure-shelf-85168.herokuapp.com/googleSignin",
             data: {
               id_token: result.getAuthResponse().id_token
             }

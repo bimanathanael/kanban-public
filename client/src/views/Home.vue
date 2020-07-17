@@ -70,7 +70,7 @@ export default {
         fetchTask(){
             axios({
                 method: "get",
-                url: 'http://localhost:3333/tasks',
+                url: 'https://pure-shelf-85168.herokuapp.com/tasks',
                 headers: {
                         access_token : localStorage.access_token
                 }
