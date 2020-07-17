@@ -4,6 +4,9 @@ const tasks = require('./tasks')
 const errHandler = require('../middlewares/errHandler')
 const { authentication } = require('../middlewares/auth')
 
+router.get('/', (req, res ) => {
+    res.send("hello World")
+})
 router.post('/login', mainController.login)
 router.post('/register', mainController.register)
 router.post('/googleSignin', mainController.googleSignin)
