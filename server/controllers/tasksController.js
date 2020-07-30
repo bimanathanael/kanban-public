@@ -74,7 +74,7 @@ class TasksController{
         }
         Task.findByPk(selectedId)
         .then ( data => {
-            if(data == null){
+            if (data == null) {
                 throw {
                     name: "customErr",
                     message: "data not found",

@@ -12,6 +12,10 @@ body {
     overflow-y: auto;
 }
 
+#formEdit{
+    color:white
+}
+
 .containerHome {
     justify-content: center;
     align-items: flex-start;

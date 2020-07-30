@@ -10704,6 +10704,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
 // import GAuth from 'vue-google-oauth2'
 // const gauthOption = {
 //   clientId: '271576244942-ci84ng84o8djrj807glsvv9747kusa4f.apps.googleusercontent.com',
@@ -10895,7 +10897,8 @@ exports.default = _default;
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-primary g-signin2 ml-2",
+                  staticClass: "btn btn-light g-signin2 ml-2",
+                  staticStyle: { width: "26%" },
                   on: {
                     click: function($event) {
                       $event.preventDefault()
@@ -10903,7 +10906,10 @@ exports.default = _default;
                     }
                   }
                 },
-                [_vm._v(" Google ")]
+                [
+                  _c("i", { staticClass: "fa fa-google" }),
+                  _vm._v(" Sign in \n          ")
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -11350,39 +11356,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var _default = {
   data: function data() {
     return {
@@ -11397,26 +11370,14 @@ var _default = {
       deletedId: null,
       taskTitle: null,
       taskCategory: null,
-      taskId: null
+      taskId: null,
+      createdAt: null
     };
   },
-  props: ["category", "dataTask"],
+  props: ["category", "dataTask", "data"],
   created: function created() {
-    // this.$emit("")
-    this.result = this.dataTask;
-    console.log(this.result, "di task");
-    this.categoryName = this.category;
-    this.UserId = localStorage.id; // var vm = this
-  },
-  computed: {
-    filteredData: function filteredData() {
-      var vm = this;
-      var data = this.result.filter(function (item) {
-        // return item.category == vm.category
-        return item.category == vm.categoryName;
-      });
-      return data;
-    }
+    this.createdAt = this.getDate(this.data.createdAt);
+    this.UserId = localStorage.id;
   },
   methods: {
     moveTo: function moveTo(id, title, target, event) {
@@ -11459,11 +11420,6 @@ var _default = {
         console.log(err);
       });
     },
-    // showEditForm(id){
-    //     console.log(id)
-    //     this.$emit("showEditPage", id)
-    //     // this.editTask = true
-    // },
     showDeleteModal: function showDeleteModal(id) {
       var _this3 = this;
 
@@ -11496,65 +11452,17 @@ var _default = {
       });
     },
     showEditPage: function showEditPage(id) {
-      var _this4 = this;
-
-      console.log("masukshow edit page", id);
-      this.errMsg = null;
-      this.succMsg = null;
-      this.showSucc = false;
-      (0, _axios.default)({
-        method: "get",
-        url: "https://pure-shelf-85168.herokuapp.com/tasks/".concat(id),
-        headers: {
-          access_token: localStorage.access_token
-        }
-      }).then(function (result) {
-        $('#editTask').modal('show');
-        console.log("berhasil memunculkan edit data ", result.data);
-        _this4.taskTitle = result.data.title;
-        _this4.taskCategory = result.data.category;
-        _this4.taskId = result.data.id; // var vm = this
-      }).catch(function (err) {
-        console.log(err);
-      });
+      console.log("masuk emit child");
+      this.$emit("emitShowEdit", id);
     },
-    processEditTask: function processEditTask() {
-      var _this5 = this;
+    getDate: function getDate(date) {
+      var today = new Date(date);
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 
-      if (this.taskTitle == "") {
-        // return console.log("password not match")
-        this.showError = true;
-        this.showSucc = false;
-        this.errMsg = "Please fill the title";
-        return console.log("Please fill the title");
-      }
-
-      var id = $('#taskId').val();
-      (0, _axios.default)({
-        method: "put",
-        url: "https://pure-shelf-85168.herokuapp.com/tasks/".concat(this.taskId),
-        headers: {
-          access_token: localStorage.access_token
-        },
-        data: {
-          title: this.taskTitle,
-          category: this.taskCategory
-        }
-      }).then(function (data) {
-        console.log("berhasil megnubah data ", data); // this.fetchTask()
-
-        _this5.showError = false;
-        _this5.errMsg = null;
-        _this5.showSucc = true;
-        _this5.succMsg = "Sucess edit data";
-        _this5.registerEmail = null;
-        _this5.taskTitle = null;
-        _this5.taskCategory = null;
-
-        _this5.$emit("reloadPageEditTask");
-      }).catch(function (err) {
-        console.log(err.response);
-      });
+      var yyyy = today.getFullYear();
+      today = mm + '/' + dd + '/' + yyyy;
+      return today;
     }
   }
 };
@@ -11571,245 +11479,150 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { attrs: { scroll: "" } },
-    [
-      _vm._l(_vm.filteredData, function(data) {
-        return _c("div", { key: data.id, staticClass: "card mine" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-2 perCard" }, [
-              _vm._v("\n                +\n            ")
-            ]),
-            _vm._v(" "),
-            !_vm.editTask
-              ? _c("div", { staticClass: "col-10 card-body" }, [
-                  _c("h6", { staticClass: "card-title" }, [
-                    _vm._v(_vm._s(data.title))
-                  ]),
-                  _vm._v(" "),
-                  data.UserId == _vm.UserId
-                    ? _c("div", { staticClass: "btn-group" }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-action",
-                            attrs: { type: "button" }
-                          },
-                          [_vm._v("Action")]
-                        ),
-                        _vm._v(" "),
-                        _vm._m(0, true),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "dropdown-menu" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "dropdown-item",
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.moveTo(
-                                    data.id,
-                                    data.title,
-                                    "Backlog"
-                                  )
-                                }
-                              }
-                            },
-                            [_vm._v("to Backlog")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "dropdown-item",
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.moveTo(
-                                    data.id,
-                                    data.title,
-                                    "Product"
-                                  )
-                                }
-                              }
-                            },
-                            [_vm._v("to Product")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "dropdown-item",
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.moveTo(
-                                    data.id,
-                                    data.title,
-                                    "Development"
-                                  )
-                                }
-                              }
-                            },
-                            [_vm._v("to Development")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "dropdown-item",
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.moveTo(data.id, data.title, "Done")
-                                }
-                              }
-                            },
-                            [_vm._v("to Done")]
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "dropdown-divider" }),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "dropdown-item bg-warning",
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.showEditPage(data.id)
-                                }
-                              }
-                            },
-                            [_vm._v("Edit this")]
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "dropdown-divider" }),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "dropdown-item bg-danger",
-                              attrs: {
-                                href: "#",
-                                "data-toggle": "modal",
-                                "data-target": "#deleteConfirmation",
-                                "data-dismiss": "modal"
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.showDeleteModal(data.id)
-                                }
-                              }
-                            },
-                            [_vm._v("Delete this")]
-                          )
-                        ])
-                      ])
-                    : _vm._e()
-                ])
-              : _vm._e()
-          ])
-        ])
-      }),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "modal fade",
-          attrs: {
-            id: "editTask",
-            tabindex: "-1",
-            role: "dialog",
-            "aria-labelledby": "formAdd",
-            "aria-hidden": "true"
-          }
-        },
-        [
-          _c("div", { staticClass: "modal-dialog" }, [
-            _c("div", { staticClass: "modal-content" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _vm.showError
-                  ? _c(
-                      "label",
-                      {
-                        staticClass: "badge badge-danger text-wrap error",
-                        attrs: { id: "error" }
-                      },
-                      [_vm._v(" " + _vm._s(_vm.errMsg) + " ")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.showSucc
-                  ? _c(
-                      "label",
-                      {
-                        staticClass: "badge badge-primary text-wrap error",
-                        attrs: { id: "success" }
-                      },
-                      [_vm._v(" " + _vm._s(_vm.succMsg) + " ")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
+  return _c("div", { attrs: { scroll: "" } }, [
+    _c("div", { staticClass: "card mine" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-2 perCard" }, [
+          _vm._v("\n                +\n            ")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-10 card-body" }, [
+          _c("h6", { staticClass: "card-title" }, [
+            _vm._v(_vm._s(_vm.data.title))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "card-title" }, [
+            _vm._v(" created : " + _vm._s(_vm.createdAt))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "card-title" }, [
+            _vm._v("by : " + _vm._s(_vm.data.User.email))
+          ]),
+          _vm._v(" "),
+          _vm.data.UserId == _vm.UserId
+            ? _c("div", { staticClass: "btn-group mt-4" }, [
                 _c(
-                  "form",
-                  {
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        return _vm.processEditTask()
+                  "button",
+                  { staticClass: "btn btn-action", attrs: { type: "button" } },
+                  [_vm._v("Action")]
+                ),
+                _vm._v(" "),
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "dropdown-menu" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.moveTo(
+                            _vm.data.id,
+                            _vm.data.title,
+                            "Backlog"
+                          )
+                        }
                       }
-                    }
-                  },
-                  [
-                    _c("div", { staticClass: "col-md-auto" }, [
-                      _c("div", { staticClass: "input-group mb-3" }, [
-                        _vm._m(2),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.taskTitle,
-                              expression: "taskTitle"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "text" },
-                          domProps: { value: _vm.taskTitle },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.taskTitle = $event.target.value
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _vm._m(3)
-                    ])
-                  ]
-                )
+                    },
+                    [_vm._v("to Backlog")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.moveTo(
+                            _vm.data.id,
+                            _vm.data.title,
+                            "Product"
+                          )
+                        }
+                      }
+                    },
+                    [_vm._v("to Product")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.moveTo(
+                            _vm.data.id,
+                            _vm.data.title,
+                            "Development"
+                          )
+                        }
+                      }
+                    },
+                    [_vm._v("to Development")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.moveTo(_vm.data.id, _vm.data.title, "Done")
+                        }
+                      }
+                    },
+                    [_vm._v("to Done")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "dropdown-item bg-warning",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.showEditPage(_vm.data.id)
+                        }
+                      }
+                    },
+                    [_vm._v("Edit this")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "dropdown-item bg-danger",
+                      attrs: {
+                        href: "#",
+                        "data-toggle": "modal",
+                        "data-target": "#deleteConfirmation",
+                        "data-dismiss": "modal"
+                      },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.showDeleteModal(_vm.data.id)
+                        }
+                      }
+                    },
+                    [_vm._v("Delete this")]
+                  )
+                ])
               ])
-            ])
-          ])
-        ]
-      )
-    ],
-    2
-  )
+            : _vm._e()
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -11829,65 +11642,6 @@ var staticRenderFns = [
       },
       [_c("span", { staticClass: "sr-only" }, [_vm._v("Toggle Dropdown")])]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "h3",
-        {
-          staticClass: "modal-title font-weight-bold",
-          attrs: { id: "formEdit" }
-        },
-        [_vm._v("Edit Task")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-prepend" }, [
-      _c(
-        "span",
-        { staticClass: "input-group-text", attrs: { id: "basic-addon1" } },
-        [_vm._v("Title")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-md-center mb-3" }, [
-      _c("button", { staticClass: "btn btn-info", attrs: { type: "submit" } }, [
-        _vm._v("Edit")
-      ]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-danger ml-3",
-          attrs: { "data-dismiss": "modal" }
-        },
-        [_vm._v("Cancel")]
-      )
-    ])
   }
 ]
 render._withStripped = true
@@ -11936,46 +11690,13 @@ var _Task = _interopRequireDefault(require("./Task"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var _default = {
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
       dataTask: [],
       categoryName: "",
       addTask: false,
@@ -11990,42 +11711,97 @@ var _default = {
       categoryAdd: null,
       taskTitle: null,
       taskCategory: null
-    };
+    }, _defineProperty(_ref, "showError", false), _defineProperty(_ref, "showSucc", false), _defineProperty(_ref, "editTask", false), _ref;
   },
-  props: ["category", "allData"],
+  props: ["datas", "category"],
   components: {
     Task: _Task.default
   },
   created: function created() {
-    // this.$emit("reloadPage")
-    console.log(this.category, "category anak");
-    console.log(this.allData, "allDataallDataallData");
+    // console.log(this.category,"category anak")
+    this.dataTask = [];
+    this.dataTask = this.datas;
+    console.log(this.dataTask, "data tiap category");
     this.categoryName = this.category;
-    this.dataTask = this.allData;
   },
   methods: {
     reloadPage: function reloadPage() {
       console.log("emit categorys");
       this.$emit("reloadPages");
     },
-    // fetchTask(){
-    //     axios({
-    //         method: "get",
-    //         url: 'https://pure-shelf-85168.herokuapp.com/tasks',
-    //         headers: {
-    //              access_token : localStorage.access_token
-    //         }
-    //     })
-    //     .then( result => {
-    //         this.allData = result.data
-    //     })
-    //     .catch ( err => {
-    //         console.log(err)
-    //     })
-    // },
-    processAddTask: function processAddTask() {
+    reloadPageDelete: function reloadPageDelete() {
+      console.log("emit categorys");
+      this.$emit("reloadPagesDelete");
+    },
+    showEditPage: function showEditPage(id) {
       var _this = this;
 
+      console.log("masukshow edit page", id);
+      this.errMsg = null;
+      this.succMsg = null;
+      this.showSucc = false;
+      this.taskTitle = null;
+      this.taskCategory = null;
+      this.taskId = null;
+      (0, _axios.default)({
+        method: "get",
+        url: "https://pure-shelf-85168.herokuapp.com/tasks/".concat(id),
+        headers: {
+          access_token: localStorage.access_token
+        }
+      }).then(function (result) {
+        _this.editTask = true;
+        _this.taskTitle = result.data.title;
+        _this.taskCategory = result.data.category;
+        _this.taskId = result.data.id;
+        console.log("berhasil memunculkan edit data ", result.data);
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    processEditTask: function processEditTask() {
+      var _this2 = this;
+
+      if (this.taskTitle == "") {
+        // return console.log("password not match")
+        this.showError = true;
+        this.showSucc = false;
+        this.errMsg = "Please fill the title";
+        return console.log("Please fill the title");
+      }
+
+      var id = $('#taskId').val();
+      (0, _axios.default)({
+        method: "put",
+        url: "https://pure-shelf-85168.herokuapp.com/tasks/".concat(this.taskId),
+        headers: {
+          access_token: localStorage.access_token
+        },
+        data: {
+          title: this.taskTitle,
+          category: this.taskCategory
+        }
+      }).then(function (data) {
+        console.log("berhasil megnubah data ", data);
+        _this2.showError = false;
+        _this2.editTask = false;
+        _this2.errMsg = null;
+        _this2.showSucc = true;
+        _this2.succMsg = "Sucess edit data";
+        _this2.registerEmail = null;
+        _this2.taskTitle = null;
+        _this2.taskCategory = null;
+
+        _this2.$emit("reloadPageEditTask");
+      }).catch(function (err) {
+        console.log(err.response);
+      });
+    },
+    processAddTask: function processAddTask() {
+      var _this3 = this;
+
+      console.log(this.title, "this.title");
+      console.log(this.categoryName, "this.categoryName");
       (0, _axios.default)({
         method: "post",
         url: "https://pure-shelf-85168.herokuapp.com/tasks",
@@ -12038,27 +11814,24 @@ var _default = {
         }
       }).then(function (data) {
         console.log("berhasil menambahkan data", data);
-        _this.title = null;
-        _this.categoryAdd = null;
-        _this.addTask = !_this.addTask;
+        _this3.title = null;
+        _this3.categoryAdd = null;
+        _this3.addTask = !_this3.addTask;
 
-        _this.$emit("reloadPageAdd");
+        _this3.$emit("reloadPageAdd");
 
-        _this.showErrorAdd = false;
-        _this.errMsgAdd = null;
+        _this3.showErrorAdd = false;
+        _this3.errMsgAdd = null;
       }).catch(function (err) {
         console.log(err);
-        _this.showErrorAdd = true;
-        _this.errMsgAdd = "please fill the title";
+        _this3.showErrorAdd = true;
+        _this3.errMsgAdd = "please fill the title";
       });
     },
     showAddTask: function showAddTask() {
-      // if(this.addTask){
       this.errMsg = null;
       this.succMsg = null;
-      this.addTask = !this.addTask; // } else{
-      // this.addTask = false
-      // }
+      this.addTask = !this.addTask;
     }
   }
 };
@@ -12087,14 +11860,106 @@ exports.default = _default;
       _vm._v(" "),
       _c("hr", { staticClass: "separator" }),
       _vm._v(" "),
-      _c("Task", {
-        staticClass: "scroll",
-        attrs: { category: _vm.category, dataTask: _vm.dataTask },
-        on: {
-          reloadPageMoveTo: _vm.reloadPage,
-          reloadPageDelete: _vm.reloadPage,
-          reloadPageEditTask: _vm.reloadPage
-        }
+      _vm.editTask
+        ? _c(
+            "div",
+            {
+              attrs: {
+                id: "editTask",
+                tabindex: "-1",
+                "aria-labelledby": "formAdd",
+                "aria-hidden": "true"
+              }
+            },
+            [
+              _c("div", [
+                _c("div", [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c("div", [
+                    _vm.showError
+                      ? _c(
+                          "label",
+                          {
+                            staticClass: "badge badge-danger text-wrap error",
+                            attrs: { id: "error" }
+                          },
+                          [_vm._v(" " + _vm._s(_vm.errMsg) + " ")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.showSucc
+                      ? _c(
+                          "label",
+                          {
+                            staticClass: "badge badge-primary text-wrap error",
+                            attrs: { id: "success" }
+                          },
+                          [_vm._v(" " + _vm._s(_vm.succMsg) + " ")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c(
+                      "form",
+                      {
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.processEditTask()
+                          }
+                        }
+                      },
+                      [
+                        _c("div", { staticClass: "col-md-auto" }, [
+                          _c("div", { staticClass: "input-group mb-3" }, [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.taskTitle,
+                                  expression: "taskTitle"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "text" },
+                              domProps: { value: _vm.taskTitle },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.taskTitle = $event.target.value
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _vm._m(2)
+                        ])
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._l(_vm.dataTask, function(data) {
+        return _c("Task", {
+          key: data.id,
+          staticClass: "scroll",
+          attrs: { data: data },
+          on: {
+            reloadPageMoveTo: _vm.reloadPage,
+            reloadPageDelete: _vm.reloadPageDelete,
+            reloadPageEditTask: _vm.reloadPage,
+            emitShowEdit: _vm.showEditPage
+          }
+        })
       }),
       _vm._v(" "),
       _c(
@@ -12164,8 +12029,8 @@ exports.default = _default;
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.categoryAdd,
-                      expression: "categoryAdd"
+                      value: _vm.categoryName,
+                      expression: "categoryName"
                     }
                   ],
                   staticClass: "form-control",
@@ -12175,27 +12040,61 @@ exports.default = _default;
                     "aria-label": "Recipient's username",
                     "aria-describedby": "button-addon2"
                   },
-                  domProps: { value: _vm.categoryAdd },
+                  domProps: { value: _vm.categoryName },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.categoryAdd = $event.target.value
+                      _vm.categoryName = $event.target.value
                     }
                   }
                 }),
                 _vm._v(" "),
-                _vm._m(0)
+                _vm._m(3)
               ]
             )
           ])
         : _vm._e()
     ],
-    1
+    2
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("h3", { staticClass: "font-weight-bold", attrs: { id: "formEdit" } }, [
+        _vm._v("Edit Task")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c(
+        "span",
+        { staticClass: "input-group-text", attrs: { id: "basic-addon1" } },
+        [_vm._v("Title")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row justify-content-md-center mb-3" }, [
+      _c("button", { staticClass: "btn btn-info", attrs: { type: "submit" } }, [
+        _vm._v("Edit")
+      ]),
+      _vm._v(" "),
+      _c("button", { staticClass: "btn btn-danger ml-3" }, [_vm._v("Cancel")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -12306,17 +12205,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
 var _default = {
   data: function data() {
     return {
-      allData: []
+      shown: true,
+      dataBacklog: [],
+      dataProduct: [],
+      dataDevelopment: [],
+      dataComplete: []
     };
   },
   created: function created() {
-    // this.fetchTask();
-    // const vm = this
-    console.log(this.allData, "di home");
-    this.fetchData();
+    var access_token = localStorage.access_token; // this.dataBacklog = []
+    // this.dataProduct = []
+    // this.dataDevelopment = []
+    // this.dataComplete = []
+
+    this.fetchTask();
   },
   components: {
     Category: _Category.default
@@ -12325,23 +12234,42 @@ var _default = {
     fetchTask: function fetchTask() {
       var _this = this;
 
-      (0, _axios.default)({
+      this.shown = !this.shown;
+      console.log(this.shown, "this.shown");
+      return (0, _axios.default)({
         method: "get",
         url: 'https://pure-shelf-85168.herokuapp.com/tasks',
         headers: {
           access_token: localStorage.access_token
         }
       }).then(function (result) {
-        console.log(result.data, "result.data");
-        _this.allData = result.data;
-        console.log(_this.allData, "di home axios");
+        _this.dataBacklog = [], _this.dataProduct = [], _this.dataDevelopment = [], _this.dataComplete = [];
+        console.log(result.data, "result");
+        result.data.forEach(function (task) {
+          if (task.category == 'Backlog') {
+            _this.dataBacklog.push(task);
+          } else if (task.category == 'Product') {
+            _this.dataProduct.push(task);
+          } else if (task.category == 'Development') {
+            _this.dataDevelopment.push(task);
+          } else if (task.category == 'Done') {
+            _this.dataComplete.push(task);
+          }
+        });
+        _this.shown = !_this.shown;
+        console.log(_this.shown, "this.shown");
+        console.log(result.data, "result.data"); // this.allData = result.data
+        // console.log(this.allData,"di home axios")
       }).catch(function (err) {
         console.log(err);
       });
-    },
-    fetchData: function fetchData() {
-      console.log("masuk balik ke home");
-      this.fetchTask();
+    }
+  },
+  watch: {
+    // whenever question changes, this function will run
+    dataBacklog: function dataBacklog(newdataBacklog, olddataBacklog) {
+      this.shown = !this.shown;
+      this.shown = !this.shown;
     }
   }
 };
@@ -12363,35 +12291,55 @@ exports.default = _default;
       "div",
       { staticClass: "d-flex justify-content-between" },
       [
-        _vm.allData.length > 0
+        _vm.shown && _vm.dataComplete.length > 0
           ? _c("Category", {
               staticClass: "sectionBacklog",
-              attrs: { category: "Backlog", allData: _vm.allData },
-              on: { reloadPages: _vm.fetchData, reloadPageAdd: _vm.fetchData }
+              attrs: { datas: _vm.dataBacklog, category: "Backlog" },
+              on: {
+                reloadPages: _vm.fetchTask,
+                reloadPagesDelete: _vm.fetchTask,
+                reloadPageAdd: _vm.fetchTask,
+                reloadPageEditTask: _vm.fetchTask
+              }
             })
           : _vm._e(),
         _vm._v(" "),
-        _vm.allData.length > 0
+        _vm.shown && _vm.dataComplete.length > 0
           ? _c("Category", {
               staticClass: "sectionProduct",
-              attrs: { category: "Product", allData: _vm.allData },
-              on: { reloadPages: _vm.fetchData, reloadPageAdd: _vm.fetchData }
+              attrs: { datas: _vm.dataProduct, category: "Product" },
+              on: {
+                reloadPages: _vm.fetchTask,
+                reloadPagesDelete: _vm.fetchTask,
+                reloadPageAdd: _vm.fetchTask,
+                reloadPageEditTask: _vm.fetchTask
+              }
             })
           : _vm._e(),
         _vm._v(" "),
-        _vm.allData.length > 0
+        _vm.shown && _vm.dataComplete.length > 0
           ? _c("Category", {
               staticClass: "sectionDev",
-              attrs: { category: "Development", allData: _vm.allData },
-              on: { reloadPage: _vm.fetchData, reloadPageAdd: _vm.fetchData }
+              attrs: { datas: _vm.dataDevelopment, category: "Development" },
+              on: {
+                reloadPages: _vm.fetchTask,
+                reloadPagesDelete: _vm.fetchTask,
+                reloadPageAdd: _vm.fetchTask,
+                reloadPageEditTask: _vm.fetchTask
+              }
             })
           : _vm._e(),
         _vm._v(" "),
-        _vm.allData.length > 0
+        _vm.shown && _vm.dataComplete.length > 0
           ? _c("Category", {
               staticClass: "sectionDone",
-              attrs: { category: "Done", allData: _vm.allData },
-              on: { reloadPage: _vm.fetchData, reloadPageAdd: _vm.fetchData }
+              attrs: { datas: _vm.dataComplete, category: "Done" },
+              on: {
+                reloadPages: _vm.fetchTask,
+                reloadPagesDelete: _vm.fetchTask,
+                reloadPageAdd: _vm.fetchTask,
+                reloadPageEditTask: _vm.fetchTask
+              }
             })
           : _vm._e()
       ],
@@ -12845,7 +12793,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34555" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33885" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

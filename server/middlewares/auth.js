@@ -21,7 +21,7 @@ function authorization ( req, res, next ) {
     const selectedId = req.params.id
     Task.findByPk(selectedId)
     .then( data => {
-        if( data.UserId == req.userData.id){
+        if( data.UserId === req.userData.id){
             next()
         } else {
             res.status(401).json({error: "not authorized"})

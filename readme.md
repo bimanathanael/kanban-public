@@ -34,7 +34,7 @@ _Response (500 - Error)_
 
 
 ### GET /tasks
-> Get all tasks base on selected task Id
+> Get all tasks 
 
 _Request Header_
 ```
@@ -91,6 +91,13 @@ _Request Header_
 ```
 {
     "access_token": "<access_token JWT>"
+}
+```
+
+_Request Parameter_
+```
+{
+    "id": "<selected task id>"
 }
 ```
 
@@ -171,6 +178,13 @@ _Request Header_
 ```
 {
     "access_token": "<access_token JWT>"
+}
+```
+
+_Request Parameter_
+```
+{
+    "id": "<selected task id>"
 }
 ```
 

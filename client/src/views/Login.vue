@@ -33,7 +33,9 @@
           </div>
           <div>
             <button type="submit" class="btn btn-light" style="margin-left:5%">Login</button>
-            <button class="btn btn-primary g-signin2 ml-2" v-on:click.prevent="onSignIn"> Google </button>
+            <button class="btn btn-light g-signin2 ml-2" v-on:click.prevent="onSignIn" style=" width: 26%;"> 
+              <i class="fa fa-google"></i> Sign in 
+            </button>
             <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
             <button type="button" class="btn btn-brown ml-2" @click="toRegister">to Register >></button>
           </div>
